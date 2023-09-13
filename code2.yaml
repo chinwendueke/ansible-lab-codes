@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes #To silence "gathering facts" section that would have shown when playbook is executed
+  tasks:
+    - name: install passwd package
+      apt:
+        name: passwd
+        state: present
+      when: ansible_distribution in "Debian, Ubuntu"
+      tags:
+        - amara    
+
+    - name: create group
+      group:
+        name: cloudteam
+        state: present
+
+    - name: Create user 
+      user:
+        name: Amara
+        comment: Amara Admin
+        group: cloudteam      
+
+- hosts: db
+  become: yes
+  tasks:
+    - name: install apache
+      apt: 
+       name: apache2
+       state: present
+
+    - name: Start apache service, if not started
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+        tags: 
+          - eke
+
+    - name: copy index file
+      copy:
+       src: index.html
+       dest: /var/www/html/index.html
+       mode: '0644'  

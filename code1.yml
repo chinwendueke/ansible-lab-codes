@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: false # To silence "gathering facts" section that would have shown when playbook is executed
+  ignore_errors: true # or yes (means same thing)
+  tasks:
+    - name: check the date
+      command: date
+    - name: check uptime
+      command: uptime
+
+
